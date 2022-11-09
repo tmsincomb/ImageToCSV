@@ -1,8 +1,8 @@
 """
 Home for string tools and any other misc tool until its large enough for it's own file
 """
-from pathlib import Path
 import os
+from pathlib import Path
 
 
 class cd:

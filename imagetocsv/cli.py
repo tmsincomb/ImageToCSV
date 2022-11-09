@@ -6,12 +6,14 @@ import click
 
 from imagetocsv import imagetocsv
 
+from .hardcoded_options import options
+
 
 @click.command()
 @click.version_option()
 @click.option(
-    "-v",
     "--verbose",
+    "-v",
     is_flag=True,
     help="Vebosity level, ex. -vvvvv for debug level logging",
 )
@@ -36,6 +38,13 @@ from imagetocsv import imagetocsv
     default=None,
     help="Columns for the CSV file",
 )
+@click.option(
+    "--preconfigured-options",
+    "-p",
+    type=click.STRING,
+    default=None,
+    help="Preconfigured Index/Header Options",
+)
 @click.argument(
     "image_path",
     required=True,
@@ -58,8 +67,24 @@ from imagetocsv import imagetocsv
         resolve_path=True,
     ),
 )
-def main(verbose: bool, index_name: str, index: str, column_header: str, image_path: str, csv_path: str):
+def main(
+    verbose: bool,
+    index_name: str,
+    index: str,
+    column_header: str,
+    preconfigured_options: str,
+    image_path: str,
+    csv_path: str,
+):
     """Console script for imagetocsv."""
+    if preconfigured_options:
+        try:
+            index_name, index, column_header = options[preconfigured_options]
+        except KeyError:
+            raise KeyError(
+                f"preconfigured_options {preconfigured_options} not found, following options are available: {options}"
+            )
+
     df = imagetocsv(image_path, index_name, index, column_header)
 
     if csv_path and Path(csv_path).name != "-":

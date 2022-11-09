@@ -39,12 +39,32 @@ def test_command_line_interface():
         [
             str(Path(__file__).parent / "data/no-grid-index-label.jpg"),
             "-",
+        ],
+    )
+    with open(Path(__file__).parent / "data/no-grid.csv", "r") as f:
+        assert csv.stdout.strip() == f.read().strip()
+    csv = runner.invoke(
+        cli.main,
+        [
+            str(Path(__file__).parent / "data/no-grid-index-label.jpg"),
+            "-",
+            "-p",
+            "bib",
+        ],
+    )
+    with open(Path(__file__).parent / "data/no-grid-index-label.csv", "r") as f:
+        assert csv.stdout.strip() == f.read().strip()
+    csv = runner.invoke(
+        cli.main,
+        [
+            str(Path(__file__).parent / "data/no-grid-index-label.jpg"),
+            "-",
             "-n",
             "Population",
             "-i",
             "All Events,Lymphocytes,Single cells...,Single cells...,Live/Dead,CD19+ Dump-,Naive gD+,Memory IgD-,IgD- KO-,P15-1,P15-2,P15-3,P15-4,MARIO WT++,P14-1,P14-2,P14-3,P14-4",
             "-c",
-            r"Events,% Parent,% Total,FSC-A Median,FSC-A %rCV,SSC-A Median,SSC-A %rCV",
+            r"Events,%Parent,%Total,FSC-A Median,FSC-A %rCV,SSC-A Median,SSC-A %rCV",
         ],
     )
     with open(Path(__file__).parent / "data/no-grid-index-label.csv", "r") as f:
@@ -52,6 +72,14 @@ def test_command_line_interface():
 
 
 def test_imagetocsv():
+    df = imagetocsv(
+        Path(__file__).parent / "data/no-grid-index-label.jpg",
+    )
+    with open(Path(__file__).parent / "data/no-grid.csv", "r") as f:
+        assert df.to_csv(index=False, header=False).strip() == f.read().strip()
+
+
+def test_imagetocsv_with_label_and_index():
     df = imagetocsv(
         Path(__file__).parent / "data/no-grid-index-label.jpg",
         index_name="Population",
@@ -75,7 +103,7 @@ def test_imagetocsv():
             "P14-3",
             "P14-4",
         ],
-        column_header=["Events", "% Parent", "% Total", "FSC-A Median", "FSC-A %rCV", "SSC-A Median", "SSC-A %rCV"],
+        column_header=["Events", "%Parent", "%Total", "FSC-A Median", "FSC-A %rCV", "SSC-A Median", "SSC-A %rCV"],
     )
     with open(Path(__file__).parent / "data/no-grid-index-label.csv", "r") as f:
         assert df.to_csv().strip() == f.read().strip()

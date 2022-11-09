@@ -107,3 +107,5 @@ ENV/
 
 # python notebooks
 notebooks
+
+.DS_Store
