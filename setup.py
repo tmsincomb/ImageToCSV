@@ -10,7 +10,7 @@ with open("README.md") as readme_file:
 
 requirements = [
     "Click>=7.0",
-    "pandas>=1.2",
+    "pandas>=1.0",
     "opencv-python>=4.6",
     "pytesseract>=0.3",
 ]
