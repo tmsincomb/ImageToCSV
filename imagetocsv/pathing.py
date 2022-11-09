@@ -1,6 +1,8 @@
 """
 Home for string tools and any other misc tool until its large enough for it's own file
 """
+from __future__ import annotations
+
 import os
 from pathlib import Path
 

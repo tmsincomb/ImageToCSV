@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+
 def fix_common_mistakes(line: str):
     if not line:
         return ""

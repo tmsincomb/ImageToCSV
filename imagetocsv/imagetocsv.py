@@ -1,8 +1,8 @@
 """Main module."""
+from __future__ import annotations
+
 import re
 import tempfile
-from io import StringIO
-from pathlib import Path
 
 import cv2
 import pandas as pd
@@ -13,7 +13,6 @@ from imagetocsv.string_modifiers import fix_common_mistakes
 
 
 def pdftocsv(file: str):
-
     tmpchar = "*"
     special_chars = "%"
     all_positions = set()
