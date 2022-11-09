@@ -30,7 +30,7 @@
 ## About
 Converts An Image to a CSV. This exists because Chorus 3.0 is bat-shit and only shows images for vital metadata.
 
-<img src="docs/images/convert.svg" width="1025"/> 
+<img src="docs/images/convert.svg" width="1025"/>
 
 
 # Installation
@@ -58,18 +58,18 @@ Options:
 # Terminal Simple Examples
 ```bash
 $ imagetocsv myimage.png mytable.csv
-# For the source image this was built for 
-$ imagetocsv -p bib myimage.png  
+# For the source image this was built for
+$ imagetocsv -p bib myimage.png
 ```
 
 # Terminal Advance Example
 ### Adding Index Name, Index, and Column Header. They needs to match the deminsions of the matrix!
 ```bash
-$ imagetocsv \ 
+$ imagetocsv \
         image.jpg table.csv \
         --index_name "Population" \
         --index "All Events,Lymphocytes,Single cells...,Single cells...,Live/Dead,CD19+ Dump-,Naive gD+,Memory IgD-,IgD- KO-,P15-1,P15-2,P15-3,P15-4,MARIO WT++,P14-1,P14-2,P14-3,P14-4" \
-        --column_header "Events,%Parent,%Total,FSC-A Median,FSC-A %rCV,SSC-A Median,SSC-A %rCV" 
+        --column_header "Events,%Parent,%Total,FSC-A Median,FSC-A %rCV,SSC-A Median,SSC-A %rCV"
 ```
 
 # Python Simple Usage
