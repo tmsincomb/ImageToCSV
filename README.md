@@ -51,14 +51,15 @@ Options:
   -i, --index TEXT          Index for the CSV file
   -c, --column_header TEXT  Columns for the CSV file
   -p, --preconfigured-options TEXT
-  
+
   --help                    Show this message and exit.
 ```
 
 # Terminal Simple Examples
 ```bash
-$ imagetocsv myimage.png mytable.csv 
-$ imagetocsv -p myimage.png 
+$ imagetocsv myimage.png mytable.csv
+# For the source image this was built for 
+$ imagetocsv -p bib myimage.png  
 ```
 
 # Terminal Advance Example
