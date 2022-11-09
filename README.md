@@ -28,7 +28,7 @@
 </p>
 
 ## About
-Converts An Image to a CSV. This exists because Chorus 3.0 are bat-shit and only show images for vital metadata
+Converts An Image to a CSV. This exists because Chorus 3.0 is bat-shit and only shows images for vital metadata.
 
 <img src="docs/images/convert.svg" width="1025"/> 
 
