@@ -25,40 +25,40 @@ def test_content(response):
     # assert 'GitHub' in BeautifulSoup(response.content).title.string
 
 
-def test_command_line_interface():
+def test_command_line_interface(fixture_setup):
     """Test the CLI."""
     runner = CliRunner()
+    no_grid_path = fixture_setup.get_no_grid()
     result = runner.invoke(cli.main)
     assert result.exit_code == 2
     assert "--help" in result.output
     help_result = runner.invoke(cli.main, ["--help"])
     assert help_result.exit_code == 0
     assert "--help" in help_result.output
-    print(str(Path(__file__).parent / "data/no-grid-index-label.jpg"))
     csv = runner.invoke(
         cli.main,
         [
-            str(Path(__file__).parent / "data/no-grid-index-label.jpg"),
+            no_grid_path,
             "-",
         ],
     )
-    with open(Path(__file__).parent / "data/no-grid.csv", "r") as f:
+    with open(fixture_setup.base_datadir / "no-grid.csv", "r") as f:
         assert csv.stdout.strip() == f.read().strip()
     csv = runner.invoke(
         cli.main,
         [
-            str(Path(__file__).parent / "data/no-grid-index-label.jpg"),
+            no_grid_path,
             "-",
             "-p",
             "bib",
         ],
     )
-    with open(Path(__file__).parent / "data/no-grid-index-label.csv", "r") as f:
+    with open(fixture_setup.base_datadir / "no-grid-index-label.csv", "r") as f:
         assert csv.stdout.strip() == f.read().strip()
     csv = runner.invoke(
         cli.main,
         [
-            str(Path(__file__).parent / "data/no-grid-index-label.jpg"),
+            no_grid_path,
             "-",
             "-n",
             "Population",
@@ -68,21 +68,21 @@ def test_command_line_interface():
             r"Events,%Parent,%Total,FSC-A Median,FSC-A %rCV,SSC-A Median,SSC-A %rCV",
         ],
     )
-    with open(Path(__file__).parent / "data/no-grid-index-label.csv", "r") as f:
+    with open(fixture_setup.base_datadir / "no-grid-index-label.csv", "r") as f:
         assert csv.stdout.strip() == f.read().strip()
 
 
-def test_imagetocsv():
-    df = imagetocsv(
-        Path(__file__).parent / "data/no-grid-index-label.jpg",
-    )
-    with open(Path(__file__).parent / "data/no-grid.csv", "r") as f:
+def test_imagetocsv(fixture_setup):
+    no_grid_path = fixture_setup.get_no_grid()
+    df = imagetocsv(no_grid_path)
+    with open(fixture_setup.base_datadir / "no-grid.csv", "r") as f:
         assert df.to_csv(index=False, header=False).strip() == f.read().strip()
 
 
-def test_imagetocsv_with_label_and_index():
+def test_imagetocsv_with_label_and_index(fixture_setup):
+    no_grid_path = fixture_setup.get_no_grid()
     df = imagetocsv(
-        Path(__file__).parent / "data/no-grid-index-label.jpg",
+        no_grid_path,
         index_name="Population",
         index=[
             "All Events",
@@ -106,5 +106,5 @@ def test_imagetocsv_with_label_and_index():
         ],
         column_header=["Events", "%Parent", "%Total", "FSC-A Median", "FSC-A %rCV", "SSC-A Median", "SSC-A %rCV"],
     )
-    with open(Path(__file__).parent / "data/no-grid-index-label.csv", "r") as f:
+    with open(fixture_setup.base_datadir / "no-grid-index-label.csv", "r") as f:
         assert df.to_csv().strip() == f.read().strip()
