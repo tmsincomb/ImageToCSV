@@ -11,7 +11,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-latest]
+        os: [macos-latest, ubuntu-latest, windows-latest]
         python-version: [3.7] # , 3.8, 3.9, "3.10", "3.11"]
     steps:
       - name: Checkout
@@ -25,6 +25,9 @@ jobs:
         run: sudo apt install --yes libpoppler-cpp-dev pkg-config
       - name: Install dependencies (macOS)
         if: runner.os == 'macOS'
+        run: brew install pkg-config poppler tesseract
+      - name: Install dependencies (Windows)
+        if: runner.os == 'Windows'
         run: brew install pkg-config poppler tesseract
       - name: Install Python Dependencies
         run: pip install '.[dev]'
