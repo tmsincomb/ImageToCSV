@@ -94,7 +94,13 @@ def imagetocsv(
     (_thresh, blackAndWhiteImage) = cv2.threshold(grayImage, 200, 255, cv2.THRESH_BINARY)
 
     with tempfile.NamedTemporaryFile(delete=False) as fp:
-        custom_oem_psm_config = r"--oem 3 --psm 6 -c preserve_interword_spaces=1x1"
+        custom_oem_psm_config = r"""
+            --oem 3 --psm 4
+            -c preserve_interword_spaces=1
+        """
+        string = pytesseract.image_to_string(blackAndWhiteImage, lang="eng", config=custom_oem_psm_config)
+        print()
+        print(string)
         pdf: bytes = pytesseract.image_to_pdf_or_hocr(
             blackAndWhiteImage, lang="eng", extension="pdf", config=custom_oem_psm_config
         )
@@ -102,6 +108,7 @@ def imagetocsv(
         rows = pdftocsv(fp.name)
 
     df = pd.DataFrame(rows)
+    # print(df.to_markdown())
     df = add_df_indexes_headers(df, index_name, index, column_header)
 
     return df

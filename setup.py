@@ -14,6 +14,7 @@ requirements = [
     "opencv-python",
     "pytesseract",
     "pdftotext",
+    "tabulate",
 ]
 
 test_requirements = [
