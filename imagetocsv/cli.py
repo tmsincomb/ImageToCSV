@@ -92,7 +92,7 @@ def main(
 
     df = imagetocsv(image_path, index_name, index, column_header)
 
-    if csv_path and Path(csv_path).name != "-":
+    if csv_path:
         df.to_csv(csv_path, index=index, header=column_header)
     else:
         print(df.to_csv(index=index, header=column_header))
