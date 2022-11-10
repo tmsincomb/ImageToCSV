@@ -28,7 +28,7 @@ jobs:
         run: brew install pkg-config poppler tesseract
       - name: Install dependencies (Windows)
         if: runner.os == 'Windows'
-        run: choco install pkg-config poppler tesseract
+        run: choco install poppler tesseract
       - name: Install Python Dependencies
         run: pip install '.[dev]'
       - name: Unit Testing
