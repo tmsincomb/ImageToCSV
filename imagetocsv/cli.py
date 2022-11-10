@@ -87,6 +87,9 @@ def main(
                 f"preconfigured_options {preconfigured_options} not found, following options are available: {options}"
             )
 
+    if Path(image_path).exists() is False:
+        raise FileNotFoundError(f"File {image_path} does not exist")
+
     df = imagetocsv(image_path, index_name, index, column_header)
 
     if csv_path and Path(csv_path).name != "-":
