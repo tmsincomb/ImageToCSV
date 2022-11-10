@@ -29,4 +29,4 @@ jobs:
       - name: Install Python Dependencies
         run: pip install '.[dev]'
       - name: Unit Testing
-        run: pytest -xsv
+        run: pytest -xsv tests/test_imagetocsv.py
