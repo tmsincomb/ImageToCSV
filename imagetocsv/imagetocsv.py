@@ -8,6 +8,7 @@ import cv2
 import pandas as pd
 import pdftotext
 import pytesseract
+import numpy as np
 
 from imagetocsv.string_modifiers import fix_common_mistakes
 
@@ -31,12 +32,13 @@ def pdftocsv(file: str):
                 # print(line)
                 positions = [m.start() for m in re.finditer(word, line)]
                 all_positions |= set(positions)
-            # print(line)
+            print(line)
         all_positions = sorted(list(all_positions))
         all_positions = [p for p in all_positions]
         all_positions[0] = all_positions[0]
         if len(all_positions) > 1:
             all_positions[-1] = all_positions[-1]
+        print(all_positions)
 
         lines = []
         for line in pdf.split("\n"):
@@ -80,6 +82,19 @@ def add_df_indexes_headers(df: pd.DataFrame, index_name: str, index: str, column
     return df
 
 
+def unsharp_mask(image, kernel_size=(5, 5), sigma=1.0, amount=1.0, threshold=0):
+    """Return a sharpened version of the image, using an unsharp mask."""
+    blurred = cv2.GaussianBlur(image, kernel_size, sigma)
+    sharpened = float(amount + 1) * image - float(amount) * blurred
+    sharpened = np.maximum(sharpened, np.zeros(sharpened.shape))
+    sharpened = np.minimum(sharpened, 255 * np.ones(sharpened.shape))
+    sharpened = sharpened.round().astype(np.uint8)
+    if threshold > 0:
+        low_contrast_mask = np.absolute(image - blurred) < threshold
+        np.copyto(sharpened, image, where=low_contrast_mask)
+    return sharpened
+
+
 def imagetocsv(
     file: str,
     index_name: str | None = None,
@@ -90,14 +105,21 @@ def imagetocsv(
     file = str(file)
 
     img = cv2.imread(file)
+    h, w, _ = img.shape
+    img = cv2.resize(img, (w * 3, h * 3))
+    img = unsharp_mask(img)
     grayImage = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
-    (_thresh, blackAndWhiteImage) = cv2.threshold(grayImage, 200, 255, cv2.THRESH_BINARY)
+    (_thresh, blackAndWhiteImage) = cv2.threshold(grayImage, 180, 255, cv2.THRESH_BINARY)
 
     with tempfile.NamedTemporaryFile(delete=False) as fp:
         custom_oem_psm_config = r"""
-            --oem 3 --psm 4
-            -c preserve_interword_spaces=1
+            --oem 3 --psm 6
+            -c tessedit_char_whitelist=0123456789.,% -c preserve_interword_spaces=1 
         """
+        # string = pytesseract.image_to_string(blackAndWhiteImage, lang="eng", config=custom_oem_psm_config)
+        # print()
+        # print(string)
+        cv2.imwrite("log.png", blackAndWhiteImage)
         string = pytesseract.image_to_string(blackAndWhiteImage, lang="eng", config=custom_oem_psm_config)
         print()
         print(string)

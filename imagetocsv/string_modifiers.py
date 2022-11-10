@@ -8,7 +8,7 @@ def fix_common_mistakes(line: str):
     line = line.strip()
 
     # Zero is a problem child. Needs special handling.
-    if line.lower() in ["00", "o0", "oo", "0o", "o", "o°", "°o", "fe"]:
+    if line.lower() in ["00", "o0", "oo", "0o", "o", "o°", "°o", "fe", "°"]:
         return "0"
 
     line = line.replace("@", "")
