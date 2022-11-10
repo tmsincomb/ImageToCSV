@@ -34,6 +34,7 @@ def test_command_line_interface():
     help_result = runner.invoke(cli.main, ["--help"])
     assert help_result.exit_code == 0
     assert "--help" in help_result.output
+    print(str(Path(__file__).parent / "data/no-grid-index-label.jpg"))
     csv = runner.invoke(
         cli.main,
         [
