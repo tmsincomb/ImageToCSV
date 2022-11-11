@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import gc
 import re
+import subprocess
 
 import cv2
 import numpy as np
@@ -110,20 +111,37 @@ def imagetocsv(
     img = unsharp_mask(img)
     grayImage = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
     (_thresh, blackAndWhiteImage) = cv2.threshold(grayImage, 180, 255, cv2.THRESH_BINARY)
-    cv2.imwrite("blackAndWhiteImage.png", blackAndWhiteImage)
+    # cv2.imwrite("blackAndWhiteImage.png", blackAndWhiteImage)
     custom_oem_psm_config = r"""
         --oem 3 --psm 6
         -c tessedit_char_whitelist=0123456789.,% -c preserve_interword_spaces=1
     """
-    pdf: bytes = pytesseract.image_to_pdf_or_hocr(
-        "blackAndWhiteImage.png", lang="eng", extension="pdf", config=custom_oem_psm_config
-    )
+    # pdf: bytes = pytesseract.image_to_pdf_or_hocr(
+    #     "blackAndWhiteImage.png", lang="eng", extension="pdf", config=custom_oem_psm_config
+    # )
 
-    tmp = NamedTemporaryFile(delete=False, suffix=".pdf", mode=None)
-    pdfname = tmp.name
-    with open(pdfname, "wb") as fp:
-        fp.write(pdf)
-    rows = pdftocsv(pdfname)
+    tmp = NamedTemporaryFile(delete=False, mode=None)
+    prefix = tmp.name
+    prefix = "test"
+    cv2.imwrite(prefix + ".png", blackAndWhiteImage)
+    _ = subprocess.run(
+        [
+            "tesseract",
+            "--oem",
+            "3",
+            "--psm",
+            "6",
+            "-c",
+            "tessedit_char_whitelist=0123456789.,%",
+            "-c",
+            "preserve_interword_spaces=1",
+            prefix + ".png",
+            prefix,
+            "pdf",
+        ],
+        capture_output=True,
+    )
+    rows = pdftocsv(prefix + ".pdf")
     del tmp
     gc.collect()
 
