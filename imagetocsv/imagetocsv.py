@@ -122,8 +122,9 @@ def imagetocsv(
 
     tmp = NamedTemporaryFile(delete=False, mode=None)
     prefix = tmp.name
+
     cv2.imwrite(prefix + ".png", blackAndWhiteImage)
-    _ = subprocess.run(
+    stdout = subprocess.run(
         [
             "tesseract",
             "--oem",
@@ -140,6 +141,7 @@ def imagetocsv(
         ],
         capture_output=True,
     )
+    print(stdout)
     rows = pdftocsv(prefix + ".pdf")
     del tmp
     gc.collect()
