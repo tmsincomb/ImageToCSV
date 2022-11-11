@@ -5,10 +5,10 @@ import re
 import tempfile
 
 import cv2
+import numpy as np
 import pandas as pd
 import pdftotext
 import pytesseract
-import numpy as np
 
 from imagetocsv.string_modifiers import fix_common_mistakes
 
@@ -32,13 +32,12 @@ def pdftocsv(file: str):
                 # print(line)
                 positions = [m.start() for m in re.finditer(word, line)]
                 all_positions |= set(positions)
-            print(line)
+
         all_positions = sorted(list(all_positions))
         all_positions = [p for p in all_positions]
         all_positions[0] = all_positions[0]
         if len(all_positions) > 1:
             all_positions[-1] = all_positions[-1]
-        print(all_positions)
 
         lines = []
         for line in pdf.split("\n"):
@@ -114,15 +113,15 @@ def imagetocsv(
     with tempfile.NamedTemporaryFile(delete=False) as fp:
         custom_oem_psm_config = r"""
             --oem 3 --psm 6
-            -c tessedit_char_whitelist=0123456789.,% -c preserve_interword_spaces=1 
+            -c tessedit_char_whitelist=0123456789.,% -c preserve_interword_spaces=1
         """
         # string = pytesseract.image_to_string(blackAndWhiteImage, lang="eng", config=custom_oem_psm_config)
         # print()
         # print(string)
         cv2.imwrite("log.png", blackAndWhiteImage)
-        string = pytesseract.image_to_string(blackAndWhiteImage, lang="eng", config=custom_oem_psm_config)
-        print()
-        print(string)
+        # string = pytesseract.image_to_string(blackAndWhiteImage, lang="eng", config=custom_oem_psm_config)
+        # print()
+        # print(string)
         pdf: bytes = pytesseract.image_to_pdf_or_hocr(
             blackAndWhiteImage, lang="eng", extension="pdf", config=custom_oem_psm_config
         )
