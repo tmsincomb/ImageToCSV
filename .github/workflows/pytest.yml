@@ -21,13 +21,12 @@ jobs:
         with:
           auto-update-conda: true
           python-version: ${{ matrix.python-version }}
-          activate-environment: anaconda-client-env
           environment-file: environment.yml
       - name: Install dependencies (linux)
         if: runner.os == 'Linux'
         run: sudo apt install --yes build-essential
       - name: Install dependencies
         run: |
-          python -m pip install .
+          $CONDA/python -m pip install .
       - name: Unit Testing
         run: pytest -xsv tests/test_imagetocsv.py
