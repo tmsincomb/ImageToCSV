@@ -122,7 +122,6 @@ def imagetocsv(
 
     tmp = NamedTemporaryFile(delete=False, mode=None)
     prefix = tmp.name
-    prefix = "test"
     cv2.imwrite(prefix + ".png", blackAndWhiteImage)
     _ = subprocess.run(
         [
