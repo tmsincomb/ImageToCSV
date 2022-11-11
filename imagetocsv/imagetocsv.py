@@ -127,12 +127,16 @@ def imagetocsv(
     )
 
     tmp = NamedTemporaryFile(delete=False, suffix=".pdf")
-    with open(tmp.name, "wb") as fp:
-        fp.write(pdf)
-    with open(tmp.name, "rb") as fp:
-        rows = pdftocsv(fp.name)
+    tmp.write(pdf)
+    rows = pdftocsv(tmp.name)
     del tmp
     gc.collect()
+    # with open(tmp.name, "wb") as fp:
+    #     fp.write(pdf)
+    # with open(tmp.name, "rb") as fp:
+    #     rows = pdftocsv(fp.name)
+    # del tmp
+    # gc.collect()
 
     df = pd.DataFrame(rows)
     # print(df.to_markdown())
