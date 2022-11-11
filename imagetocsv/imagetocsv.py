@@ -110,7 +110,8 @@ def imagetocsv(
     grayImage = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
     (_thresh, blackAndWhiteImage) = cv2.threshold(grayImage, 180, 255, cv2.THRESH_BINARY)
 
-    with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as fp:
+    tmp = tempfile.NamedTemporaryFile(delete=False, suffix=".pdf")
+    with open(tmp.name, "wb") as fp:
         custom_oem_psm_config = r"""
             --oem 3 --psm 6
             -c tessedit_char_whitelist=0123456789.,% -c preserve_interword_spaces=1
@@ -126,6 +127,7 @@ def imagetocsv(
             blackAndWhiteImage, lang="eng", extension="pdf", config=custom_oem_psm_config
         )
         fp.write(pdf)
+    with open(tmp.name, "rb") as fp:
         rows = pdftocsv(fp.name)
 
     df = pd.DataFrame(rows)
