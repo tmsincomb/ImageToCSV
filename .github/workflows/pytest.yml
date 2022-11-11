@@ -24,9 +24,9 @@ jobs:
           environment-file: environment.yml
       - name: Install dependencies (linux)
         if: runner.os == 'Linux'
-        run: sudo apt install --yes build-essential
+        run: sudo apt install --yes libpoppler-cpp-dev pkg-config tesseract-ocr libtesseract-dev
       - name: Install dependencies
         run: |
-          $CONDA/python -m pip install .
+          pip install .
       - name: Unit Testing
         run: pytest -xsv tests/test_imagetocsv.py
