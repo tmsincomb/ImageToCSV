@@ -110,20 +110,13 @@ def imagetocsv(
     img = unsharp_mask(img)
     grayImage = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
     (_thresh, blackAndWhiteImage) = cv2.threshold(grayImage, 180, 255, cv2.THRESH_BINARY)
-
+    cv2.imwrite("blackAndWhiteImage.png", blackAndWhiteImage)
     custom_oem_psm_config = r"""
         --oem 3 --psm 6
         -c tessedit_char_whitelist=0123456789.,% -c preserve_interword_spaces=1
     """
-    # string = pytesseract.image_to_string(blackAndWhiteImage, lang="eng", config=custom_oem_psm_config)
-    # print()
-    # print(string)
-    cv2.imwrite("log.png", blackAndWhiteImage)
-    # string = pytesseract.image_to_string(blackAndWhiteImage, lang="eng", config=custom_oem_psm_config)
-    # print()
-    # print(string)
     pdf: bytes = pytesseract.image_to_pdf_or_hocr(
-        blackAndWhiteImage, lang="eng", extension="pdf", config=custom_oem_psm_config
+        "blackAndWhiteImage.png", lang="eng", extension="pdf", config=custom_oem_psm_config
     )
 
     tmp = NamedTemporaryFile(delete=False, suffix=".pdf", mode=None)
