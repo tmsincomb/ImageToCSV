@@ -23,7 +23,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install Dependencies
         run: |
-          conda install -y poppler tesseract
+          conda install -y pip poppler tesseract
           pip install '.[dev]'
       - name: Unit Testing
         run: pytest -xsv tests/test_imagetocsv.py
