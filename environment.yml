@@ -6,5 +6,3 @@ dependencies:
   - tesseract
   - poppler
   - pip
-  - pip:
-      - ".[dev]"
