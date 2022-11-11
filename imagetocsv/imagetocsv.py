@@ -126,17 +126,13 @@ def imagetocsv(
         blackAndWhiteImage, lang="eng", extension="pdf", config=custom_oem_psm_config
     )
 
-    tmp = NamedTemporaryFile(delete=False, suffix=".pdf")
-    tmp.write(pdf)
-    rows = pdftocsv(tmp.name)
+    tmp = NamedTemporaryFile(delete=False, suffix=".pdf", mode=None)
+    pdfname = tmp.name
+    with open(pdfname, "wb") as fp:
+        fp.write(pdf)
+    rows = pdftocsv(pdfname)
     del tmp
     gc.collect()
-    # with open(tmp.name, "wb") as fp:
-    #     fp.write(pdf)
-    # with open(tmp.name, "rb") as fp:
-    #     rows = pdftocsv(fp.name)
-    # del tmp
-    # gc.collect()
 
     df = pd.DataFrame(rows)
     # print(df.to_markdown())
