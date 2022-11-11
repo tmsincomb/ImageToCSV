@@ -24,6 +24,7 @@ jobs:
       - name: Install Dependencies
         run: |
           conda install -y pip poppler tesseract
-          pip install '.[dev]'
+          pip install .
+          pip install pytest
       - name: Unit Testing
         run: pytest -xsv tests/test_imagetocsv.py
