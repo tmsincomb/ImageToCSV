@@ -7,6 +7,7 @@ import subprocess
 
 import cv2
 import numpy as np
+import numpy.typing as npt
 import pandas as pd
 import pdftotext
 import pytesseract
@@ -15,11 +16,24 @@ from imagetocsv.string_modifiers import fix_common_mistakes
 from imagetocsv.tempfile import NamedTemporaryFile
 
 
-def pdftocsv(file: str):
+def pdftocsv(file: str) -> list[list[str]]:
+    """Convert a pdf file to a list of lists of strings. We do this to keep layout information.
+
+    Parameters
+    ----------
+    file : str
+        Path to the pdf file.
+
+    Returns
+    -------
+    list[list[str]]
+        List of lists of strings.
+    """
     tmpchar = "*"
     special_chars = "%"
-    all_positions = set()
-    # file = '../tests/data/myimage.pdf'
+    all_positions: set[int] = set()
+
+    # Find start positions of all columns
     with open(file, "rb") as f:
         pdf = pdftotext.PDF(f, physical=True)[0]
         for line in pdf.split("\n"):
@@ -27,28 +41,26 @@ def pdftocsv(file: str):
                 line = line.replace(f" {special_char}", f"{special_char} ")
                 line = line.replace(f"  {special_char}", f"{special_char}  ")
             line = f" {line.strip()} "
-            for i, word in enumerate(line.split()):
+            for word in line.split():
                 if not word:
                     continue
                 word = f" {word} "
                 positions = [m.start() for m in re.finditer(word, line)]
                 all_positions |= set(positions)
+        ali_positions = sorted(list(all_positions))
+        ali_positions = [p for p in ali_positions]
+        ali_positions[0] = ali_positions[0]
+        if len(ali_positions) > 1:
+            ali_positions[-1] = ali_positions[-1]
 
-        all_positions = sorted(list(all_positions))
-        all_positions = [p for p in all_positions]
-        all_positions[0] = all_positions[0]
-        if len(all_positions) > 1:
-            all_positions[-1] = all_positions[-1]
-
-        lines = []
+        # Add special temp character to empty string to empty cell
+        lines: list[str] = []
         for line in pdf.split("\n"):
-            # line = line.strip()
-            print(line)
             if not [v for v in line.strip()]:
                 continue
             for special_char in special_chars.split():
-                line = line.replace(f" {special_char}", f"{special_char} ")
-                line = line.replace(f"  {special_char}", f"{special_char}  ")
+                line: str = line.replace(f" {special_char}", f"{special_char} ")
+                line: str = line.replace(f"  {special_char}", f"{special_char}  ")
             for pos in all_positions:
                 try:
                     if not line[pos].strip():
@@ -57,6 +69,8 @@ def pdftocsv(file: str):
                     line = line.ljust(pos, " ") + tmpchar
             lines.append(line)
 
+        # 1. replace empty cells with special char with empty string
+        # 2. fix any cells with common issues
         rows = []
         for line in lines:
             row = []
@@ -71,7 +85,6 @@ def pdftocsv(file: str):
 
 
 def add_df_indexes_headers(df: pd.DataFrame, index_name: str, index: str, column_header: str):
-
     if column_header:
         df.columns = column_header.split(",") if isinstance(column_header, str) else column_header
     if index:
@@ -82,8 +95,32 @@ def add_df_indexes_headers(df: pd.DataFrame, index_name: str, index: str, column
     return df
 
 
-def unsharp_mask(image, kernel_size=(5, 5), sigma=1.0, amount=1.0, threshold=0):
-    """Return a sharpened version of the image, using an unsharp mask."""
+def unsharp_mask(
+    image: npt.NDArray[np.uint8],
+    kernel_size: tuple[int, int] = (5, 5),
+    sigma: float = 1.0,
+    amount: float = 1.0,
+    threshold: float = 0,
+):
+    """Return a sharpened version of the image, using an unsharp mask.
+
+    Parameters
+    ----------
+    image : np.ndarray
+        image - The image to be sharpened.
+    kernel_size : tuple[int, int], optional
+        kernel_size - The size of the Gaussian blur kernel, by default (5, 5)
+    sigma : float, optional
+        sigma - The standard deviation of the Gaussian blur, by default 1.0
+    amount : float, optional
+        amount - The strength of the sharpening, by default 1.0
+    threshold : float, optional
+        threshold - The threshold for the mask, by default 0
+
+    Returns
+    -------
+        np.ndarray
+    """
     blurred = cv2.GaussianBlur(image, kernel_size, sigma)
     sharpened = float(amount + 1) * image - float(amount) * blurred
     sharpened = np.maximum(sharpened, np.zeros(sharpened.shape))
