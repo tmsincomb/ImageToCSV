@@ -9,10 +9,10 @@ from imagetocsv import imagetocsv
 def test_imagetocsv(fixture_setup):
     no_grid_path = fixture_setup.get_no_grid()
     df = imagetocsv(no_grid_path)
-    test_csv = df.to_csv(index=False, header=False, encoding="utf-8-sig", lineterminator="\n")
+    test_csv = df.to_csv(index=False, header=False, encoding="utf-8-sig")
     ref_csv = pd.read_csv(
-        fixture_setup.base_datadir / "no-grid.csv", encoding="utf-8-sig", lineterminator="\n", header=None, dtype=str
-    ).to_csv(index=False, header=False, encoding="utf-8-sig", lineterminator="\n")
+        fixture_setup.base_datadir / "no-grid.csv", encoding="utf-8-sig", header=None, dtype=str
+    ).to_csv(index=False, header=False, encoding="utf-8-sig")
     print(test_csv)
     print(ref_csv)
     assert test_csv == ref_csv
@@ -45,14 +45,14 @@ def test_imagetocsv_with_label_and_index(fixture_setup):
         ],
         column_header=["Events", "%Parent", "%Total", "FSC-A Median", "FSC-A %rCV", "SSC-A Median", "SSC-A %rCV"],
     )
-    test_csv = df.to_csv(encoding="utf-8-sig", lineterminator="\n")
+    test_csv = df.to_csv(encoding="utf-8-sig")
     ref_csv = pd.read_csv(
         fixture_setup.base_datadir / "no-grid-index-label.csv",
         encoding="utf-8-sig",
         lineterminator="\n",
         header=None,
         dtype=str,
-    ).to_csv(index=False, header=False, encoding="utf-8-sig", lineterminator="\n")
+    ).to_csv(index=False, header=False, encoding="utf-8-sig")
     print(test_csv)
     print(ref_csv)
     assert test_csv == ref_csv
