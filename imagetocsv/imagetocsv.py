@@ -31,7 +31,7 @@ def pdftocsv(file: str):
                 if not word:
                     continue
                 word = f" {word} "
-                # print(line)
+                print(line)
                 positions = [m.start() for m in re.finditer(word, line)]
                 all_positions |= set(positions)
 
