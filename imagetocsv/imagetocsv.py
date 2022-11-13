@@ -113,8 +113,12 @@ def imagetocsv(
     (_thresh, blackAndWhiteImage) = cv2.threshold(grayImage, 180, 255, cv2.THRESH_BINARY)
     # cv2.imwrite("blackAndWhiteImage.png", blackAndWhiteImage)
     custom_oem_psm_config = r"""
-        --oem 3 --psm 6
-        -c tessedit_char_whitelist=0123456789.,% -c preserve_interword_spaces=1
+        --oem 3 
+        --psm 6
+        -1 deu
+        -c tessedit_char_whitelist=0123456789.,% 
+        -c preserve_interword_spaces=1
+        -c tessedit_create_pdf=1
     """
     # pdf: bytes = pytesseract.image_to_pdf_or_hocr(
     #     "blackAndWhiteImage.png", lang="eng", extension="pdf", config=custom_oem_psm_config
@@ -122,7 +126,7 @@ def imagetocsv(
 
     tmp = NamedTemporaryFile(delete=False, mode=None)
     prefix = tmp.name
-    prefix = "temp"
+    # prefix = "temp"
     cv2.imwrite(prefix + ".png", blackAndWhiteImage)
     stdout = subprocess.run(
         [
@@ -131,13 +135,17 @@ def imagetocsv(
             "3",
             "--psm",
             "6",
+            "-l",
+            "eng",
             "-c",
             "tessedit_char_whitelist=0123456789.,%",
             "-c",
             "preserve_interword_spaces=1",
+            "-c",
+            "tessedit_create_pdf=1",
             prefix + ".png",
             prefix,
-            "pdf",
+            # "pdf",
         ],
         capture_output=True,
     )
