@@ -31,7 +31,6 @@ def pdftocsv(file: str):
                 if not word:
                     continue
                 word = f" {word} "
-                print(line)
                 positions = [m.start() for m in re.finditer(word, line)]
                 all_positions |= set(positions)
 
@@ -44,7 +43,7 @@ def pdftocsv(file: str):
         lines = []
         for line in pdf.split("\n"):
             # line = line.strip()
-            # print(line)
+            print(line)
             if not [v for v in line.strip()]:
                 continue
             for special_char in special_chars.split():
