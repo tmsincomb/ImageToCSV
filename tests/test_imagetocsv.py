@@ -47,11 +47,7 @@ def test_imagetocsv_with_label_and_index(fixture_setup):
     )
     test_csv = df.to_csv(encoding="utf-8-sig")
     ref_csv = pd.read_csv(
-        fixture_setup.base_datadir / "no-grid-index-label.csv",
-        encoding="utf-8-sig",
-        lineterminator="\n",
-        header=None,
-        dtype=str,
+        fixture_setup.base_datadir / "no-grid-index-label.csv", encoding="utf-8-sig", header=None, dtype=str
     ).to_csv(index=False, header=False, encoding="utf-8-sig")
     print(test_csv)
     print(ref_csv)
