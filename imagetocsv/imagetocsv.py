@@ -113,10 +113,10 @@ def imagetocsv(
     (_thresh, blackAndWhiteImage) = cv2.threshold(grayImage, 180, 255, cv2.THRESH_BINARY)
     # cv2.imwrite("blackAndWhiteImage.png", blackAndWhiteImage)
     custom_oem_psm_config = r"""
-        --oem 3 
+        --oem 3
         --psm 6
         -1 deu
-        -c tessedit_char_whitelist=0123456789.,% 
+        -c tessedit_char_whitelist=0123456789.,%
         -c preserve_interword_spaces=1
         -c tessedit_create_pdf=1
     """
