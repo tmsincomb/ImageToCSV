@@ -7,9 +7,9 @@ from imagetocsv import imagetocsv
 def test_imagetocsv(fixture_setup):
     no_grid_path = fixture_setup.get_no_grid()
     df = imagetocsv(no_grid_path)
-    csv = df.to_csv(index=False, header=False).replace(r"\r\n", "").replace(r"\r", "").strip()
-    with open(fixture_setup.base_datadir / "no-grid.csv", "r") as f:
-        assert csv == f.read().strip()
+    csv = df.to_csv(index=False, header=False, encoding="utf-8-sig")
+    with open(fixture_setup.base_datadir / "no-grid.csv", "r", encoding="utf-8-sig") as f:
+        assert csv == f.read()
 
 
 def test_imagetocsv_with_label_and_index(fixture_setup):
@@ -39,6 +39,6 @@ def test_imagetocsv_with_label_and_index(fixture_setup):
         ],
         column_header=["Events", "%Parent", "%Total", "FSC-A Median", "FSC-A %rCV", "SSC-A Median", "SSC-A %rCV"],
     )
-    csv = df.to_csv(index=False, header=False).replace(r"\r\n", "").replace(r"\r", "").strip()
-    with open(fixture_setup.base_datadir / "no-grid-index-label.csv", "r") as f:
-        assert csv == f.read().strip()
+    csv = df.to_csv(index=False, header=False, encoding="utf-8-sig")
+    with open(fixture_setup.base_datadir / "no-grid-index-label.csv", "r", encoding="utf-8-sig") as f:
+        assert csv == f.read()
