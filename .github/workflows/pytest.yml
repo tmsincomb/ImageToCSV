@@ -24,7 +24,7 @@ jobs:
           environment-file: environment.yml
       - name: Install dependencies (linux)
         if: runner.os == 'Linux'
-        run: sudo apt install --yes build-essential
+        run: sudo apt install --yes libpoppler-cpp-dev pkg-config tesseract-ocr libtesseract-dev
       - name: Install dependencies
         shell: bash -l {0}
         run: |

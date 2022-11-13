@@ -10,10 +10,12 @@ import numpy as np
 import numpy.typing as npt
 import pandas as pd
 import pdftotext
-import pytesseract
 
 from imagetocsv.string_modifiers import fix_common_mistakes
 from imagetocsv.tempfile import NamedTemporaryFile
+
+# import pytesseract
+
 
 
 def pdftocsv(file: str) -> list[list[str]]:
@@ -84,7 +86,25 @@ def pdftocsv(file: str) -> list[list[str]]:
     return rows
 
 
-def add_df_indexes_headers(df: pd.DataFrame, index_name: str, index: str, column_header: str):
+def add_df_indexes_headers(df: pd.DataFrame, index_name: str, index: str, column_header: str) -> pd.DataFrame:
+    """Add indexes and headers to a dataframe.
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        The dataframe to add indexes and headers to.
+    index_name : str, optional
+        Name of the index, by default None
+    index : list[str] | str, optional
+        Index values, by default None
+    column_header : list[str] | str, optional
+        Column header values, by default None
+
+    Returns
+    -------
+    pd.DataFrame
+        The dataframe with indexes and headers.
+    """
     if column_header:
         df.columns = column_header.split(",") if isinstance(column_header, str) else column_header
     if index:
@@ -119,7 +139,8 @@ def unsharp_mask(
 
     Returns
     -------
-        np.ndarray
+    np.ndarray
+        The sharpened image.
     """
     blurred = cv2.GaussianBlur(image, kernel_size, sigma)
     sharpened = float(amount + 1) * image - float(amount) * blurred
@@ -138,7 +159,23 @@ def imagetocsv(
     index: list[str] | str | None = None,
     column_header: list[str] | str | None = None,
 ) -> pd.DataFrame:
+    """Convert an image file to a pandas DataFrame.
 
+    Parameters
+    ----------
+    file : str
+        Path to the image file.
+    index_name : str, optional
+        Name of the index, by default None
+    index : list[str] | str, optional
+        Index values, by default None
+    column_header : list[str] | str, optional
+        Column header values, by default None
+
+    Returns
+    -------
+    pd.DataFrame
+    """
     file = str(file)
 
     img = cv2.imread(file)
@@ -147,24 +184,25 @@ def imagetocsv(
     img = unsharp_mask(img)
     grayImage = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
     (_thresh, blackAndWhiteImage) = cv2.threshold(grayImage, 180, 255, cv2.THRESH_BINARY)
-    # cv2.imwrite("blackAndWhiteImage.png", blackAndWhiteImage)
-    custom_oem_psm_config = r"""
-        --oem 3
-        --psm 6
-        -1 deu
-        -c tessedit_char_whitelist=0123456789.,%
-        -c preserve_interword_spaces=1
-        -c tessedit_create_pdf=1
-    """
+
+    # TODO: see if we can use pytesseract to get the table for windows in version 0.3.0
+    # custom_oem_psm_config = r"""
+    #     --oem 3
+    #     --psm 6
+    #     -1 deu
+    #     -c tessedit_char_whitelist=0123456789.,%
+    #     -c preserve_interword_spaces=1
+    #     -c tessedit_create_pdf=1
+    # """
     # pdf: bytes = pytesseract.image_to_pdf_or_hocr(
     #     "blackAndWhiteImage.png", lang="eng", extension="pdf", config=custom_oem_psm_config
     # )
 
     tmp = NamedTemporaryFile(delete=False, mode=None)
-    prefix = tmp.name
-    # prefix = "temp"
+    prefix: str = tmp.name
+    # Tesseract cannot handle stdin so we need to write the image to a file first
     cv2.imwrite(prefix + ".png", blackAndWhiteImage)
-    stdout = subprocess.run(
+    _ = subprocess.run(
         [
             "tesseract",
             "--oem",
@@ -185,13 +223,13 @@ def imagetocsv(
         ],
         capture_output=True,
     )
-    print(stdout)
+    # pdftotext for layout analysis
     rows = pdftocsv(prefix + ".pdf")
+    # remove the temporary files in garbage collection for windows to handle it
     del tmp
     gc.collect()
 
     df = pd.DataFrame(rows)
-    # print(df.to_markdown())
     df = add_df_indexes_headers(df, index_name, index, column_header)
 
     return df
