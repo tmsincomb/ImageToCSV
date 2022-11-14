@@ -67,7 +67,7 @@ Options:
 # Terminal Simple Examples
 ```bash
 $ imagetocsv myimage.png mytable.csv
-# For the source image this was built for
+# For the hardcoded options use -p. The "-p bib" option is for Chorus 3.0 columns and headers so you dont have to use the advanced options
 $ imagetocsv -p bib myimage.png
 ```
 
