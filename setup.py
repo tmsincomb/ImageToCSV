@@ -26,7 +26,7 @@ setup(
     author_email="troysincomb@gmail.com",
     python_requires=">=3.7",
     classifiers=[
-        "Development Status :: Beta",
+        "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",
         "Natural Language :: English",
@@ -56,6 +56,6 @@ setup(
     test_suite="tests",
     tests_require=test_requirements,
     url="https://github.com/tmsincomb/imagetocsv",
-    version="0.2.0",
+    version="0.2.1",
     zip_safe=False,
 )
