@@ -42,8 +42,9 @@ def test_command_line_interface(fixture_setup):
             "-",
         ],
     )
+    csv = "\n".join(csv.stdout.splitlines()).strip()
     with open(fixture_setup.base_datadir / "no-grid.csv", "r") as f:
-        assert csv.stdout.strip() == f.read().strip()
+        assert csv == f.read().strip()
     csv = runner.invoke(
         cli.main,
         [
@@ -54,7 +55,7 @@ def test_command_line_interface(fixture_setup):
         ],
     )
     with open(fixture_setup.base_datadir / "no-grid-index-label.csv", "r") as f:
-        assert csv.stdout.strip() == f.read().strip()
+        assert csv == f.read().strip()
     csv = runner.invoke(
         cli.main,
         [
@@ -69,4 +70,4 @@ def test_command_line_interface(fixture_setup):
         ],
     )
     with open(fixture_setup.base_datadir / "no-grid-index-label.csv", "r") as f:
-        assert csv.stdout.strip() == f.read().strip()
+        assert csv == f.read().strip()

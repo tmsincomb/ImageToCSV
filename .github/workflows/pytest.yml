@@ -8,28 +8,27 @@ on:
     branches: ["main", "development"]
 jobs:
   pytest:
+    name: Ex1 (${{ matrix.python-version }}, ${{ matrix.os }})
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
-        os: [macos-latest, windows-latest]
-        python-version: [3.7] # , 3.8, 3.9, "3.10", "3.11"]
+        os: [windows-latest, ubuntu-latest, macos-latest]
+        python-version: [3.7, 3.8, 3.9, "3.10", "3.11"]
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Setup Python
-        uses: actions/setup-python@v4
+      - uses: actions/checkout@v3
+      - uses: conda-incubator/setup-miniconda@v2
         with:
+          auto-update-conda: true
           python-version: ${{ matrix.python-version }}
+          environment-file: environment.yml
       - name: Install dependencies (linux)
         if: runner.os == 'Linux'
         run: sudo apt install --yes libpoppler-cpp-dev pkg-config tesseract-ocr libtesseract-dev
-      - name: Install dependencies (macOS)
-        if: runner.os == 'macOS'
-        run: brew install pkg-config poppler tesseract
-      - name: Install dependencies (Windows)
-        if: runner.os == 'Windows'
-        run: choco install poppler tesseract
-      - name: Install Python Dependencies
-        run: pip install '.[dev]'
+      - name: Install dependencies
+        shell: bash -l {0}
+        run: |
+          pip install '.[dev]'
       - name: Unit Testing
-        run: pytest -xsv tests/test_imagetocsv.py
+        shell: bash -l {0}
+        run: pytest -xsvv tests/test_imagetocsv.py

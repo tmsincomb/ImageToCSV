@@ -1,0 +1,8 @@
+name: anaconda-client-env
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - tesseract
+  - poppler
+  - pip

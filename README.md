@@ -5,8 +5,8 @@
 
 <div class="flex-container" align="center">
     <a href="https://github.com/jwillis0720/template-repo/commits/master">
-    <a href="https://img.shields.io/badge/Python-3.6%C3.%7C3.8%7C3.9%7C3.10-blue">
-    <img src="https://img.shields.io/badge/Python-3.6%7C3.7%7C3.8%7C3.9%7C3.10%7C3.11-blue"
+    <a href="https://img.shields.io/badge/Python-3.%7C3.8%7C3.9%7C3.10-blue">
+    <img src="https://img.shields.io/badge/Python-3.7%7C3.8%7C3.9%7C3.10%7C3.11-blue"
         alt="Python Version">
     <a href="https://github.com/psf/black">
     <img src="https://img.shields.io/badge/code%20style-black-000000.svg"
@@ -15,6 +15,13 @@
     <a href="https://github.com/pre-commit/pre-commit">
     <img src="https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white"
         alt="pre commit">
+    </br>
+    <img src="https://img.shields.io/badge/mac%20os-000000?style=for-the-badge&logo=macos&logoColor=F0F0F0"
+        alt="MacOS">
+    <img src="https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black"
+        alt="Linux">
+    <img src="https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white"
+        alt="Windows">
 </div>
 
 <p align="center" style="color:green">
@@ -27,15 +34,17 @@
   <a href="#license">License</a>
 </p>
 
-## About
+# About
 Converts An Image to a CSV. This exists because Chorus 3.0 is bat-shit and only shows images for vital metadata.
+<img src="docs/images/convert.png" width="1025"/>
 
-<img src="docs/images/convert.svg" width="1025"/>
 
-
-# Installation
+# Installation for MacOS, Linux, and Windows
+### - Tesseract for the OCR test recognition
+### - Poppler for the pdf/text manipulation
 ```
-pip install imagetocsv
+$ conda install -c conda-forge tesseract==5.2.0 poppler==22.11.0
+$ pip install imagetocsv
 ```
 
 # Terminal Usage
@@ -58,7 +67,7 @@ Options:
 # Terminal Simple Examples
 ```bash
 $ imagetocsv myimage.png mytable.csv
-# For the source image this was built for
+# For the hardcoded options use -p. The "-p bib" option is for Chorus 3.0 columns and headers so you dont have to use the advanced options
 $ imagetocsv -p bib myimage.png
 ```
 
