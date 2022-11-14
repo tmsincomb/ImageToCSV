@@ -35,8 +35,8 @@
 </p>
 
 # About
-Converts An Image to a CSV. This exists because Chorus 3.0 is bat-shit and only shows images for vital metadata.
-<img src="docs/images/convert.png" width="1025"/>
+Converts an Image to a CSV. This exists because Chorus 3.0 is bat-shit and only shows images for vital metadata.
+<img src="https://raw.githubusercontent.com/tmsincomb/ImageToCSV/v0.2.0/docs/images/convert.png" width="1025"/>
 
 
 # Installation for MacOS, Linux, and Windows
