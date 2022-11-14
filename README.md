@@ -40,7 +40,7 @@ Converts an Image to a CSV. This exists because Chorus 3.0 is bat-shit and only 
 
 
 # Installation for MacOS, Linux, and Windows
-### - Tesseract for the OCR test recognition
+### - Tesseract for the OCR text recognition
 ### - Poppler for the pdf/text manipulation
 ```
 $ conda install -c conda-forge tesseract==5.2.0 poppler==22.11.0
