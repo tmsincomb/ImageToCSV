@@ -16,6 +16,11 @@
     <img src="https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white"
         alt="pre commit">
     </br>
+    <a href="https://tesseract-ocr.github.io/tessdoc/Installation.html">
+    <img src="https://img.shields.io/badge/Tesseract-5.2.0-teal.svg" alt="Tesseract">
+    <a href="https://poppler.freedesktop.org/">
+    <img src="https://img.shields.io/badge/Poppler-22.11.0-teal.svg" alt="Tesseract">
+    </br>
     <img src="https://img.shields.io/badge/mac%20os-000000?style=for-the-badge&logo=macos&logoColor=F0F0F0"
         alt="MacOS">
     <img src="https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black"
@@ -26,11 +31,9 @@
 
 <p align="center" style="color:green">
   <a href="#about">About</a> •
-  <a href="#installation">Installation</a> •
-  <a href="#usage">Shell Usage</a> •
-  <!-- <a href="#contributing">Contributing</a> • -->
-  <!-- <a href="#credits">Credits</a> • -->
-  <!-- <a href="#support">Support</a> • -->
+  <a href="#macos-install">Install</a> •
+  <a href="#terminal-usage">Terminal</a> •
+  <a href="#python-simple-usage">Python</a> •
   <a href="#license">License</a>
 </p>
 
@@ -38,6 +41,29 @@
 Converts an Image to a CSV. This exists because Chorus 3.0 is bat-shit and only shows images for vital metadata.
 <img src="https://raw.githubusercontent.com/tmsincomb/ImageToCSV/v0.2.0/docs/images/convert.png" width="1025"/>
 
+# MacOS Install
+```bash
+$ conda install -c conda-forge tesseract==5.2.0 poppler==22.11.0
+$ pip install imagetocsv
+```
+# Windows Install
+```bash
+$ conda install -c conda-forge tesseract==5.2.0 poppler==22.11.0
+$ pip install imagetocsv
+```
+# Linux Install :: Python 3.8 or greater
+```bash
+$ conda install -c conda-forge tesseract==5.2.0 poppler==22.11.0
+$ pip install imagetocsv
+```
+
+# Linux Install :: Only applies to Python 3.7
+### Bug with poppler not having everything needed from conda itself
+```bash
+$ sudo apt install --yes build-essential libpoppler-cpp-dev pkg-config tesseract-ocr libtesseract-dev
+$ conda install -c conda-forge tesseract==5.2.0 poppler==22.11.0
+$ pip install imagetocsv
+```
 
 # Installation for MacOS, Linux, and Windows
 ### - Tesseract for the OCR text recognition
