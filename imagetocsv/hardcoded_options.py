@@ -1,5 +1,5 @@
 options = {
-    "bib": (
+    "chrous": (
         "Population",
         [
             "All Events",
