@@ -56,7 +56,6 @@ Special walkthrough for Windows users since Windows is awful.
 curl -O https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Windows-x86_64.exe
 start /wait "" Miniforge3-Windows-x86_64.exe /InstallationType=JustMe /RegisterPython=0 /S /D=%UserProfile%\Miniforge3
 # Follow the prompts.
-conda install -c conda-forge tesseract==5.2.0 poppler==22.11.0
 ```
 
 # Bugs
@@ -72,13 +71,23 @@ sudo apt install --yes build-essential libpoppler-cpp-dev pkg-config tesseract-o
 # Installation
 
 ```bash
+conda install -c conda-forge tesseract==5.2.0 poppler==22.11.0
 pip install imagetocsv
 ```
 
 # Development
 
-## Testing
+## Conda environment
+
 ```bash
+conda create -n imagetocsv -f environment.yml
+conda activate imagetocsv
+```
+
+## Testing
+
+```bash
+cd ImageToCSV
 pytest -svvv tests
 ```
 
