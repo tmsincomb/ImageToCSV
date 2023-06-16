@@ -31,9 +31,9 @@
 
 <p align="center" style="color:green">
   <a href="#about">About</a> •
-  <a href="#macos-install">Install</a> •
-  <a href="#terminal-usage">Terminal</a> •
-  <a href="#python-simple-usage">Python</a> •
+  <a href="#installation">Install</a> •
+  <a href="#terminal">Terminal</a> •
+  <a href="#python">Python</a> •
   <a href="#license">License</a>
 </p>
 
@@ -71,7 +71,8 @@ sudo apt install --yes build-essential libpoppler-cpp-dev pkg-config tesseract-o
 # Installation
 
 ```bash
-conda install -c conda-forge tesseract==5.2.0 poppler==22.11.0
+conda create -n imagetocsv -f environment.yml
+conda activate imagetocsv
 pip install imagetocsv
 ```
 
@@ -82,6 +83,7 @@ pip install imagetocsv
 ```bash
 conda create -n imagetocsv -f environment.yml
 conda activate imagetocsv
+pip install -e ".[dev]"
 ```
 
 ## Testing

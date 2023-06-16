@@ -1,17 +1,19 @@
 import os
 import tempfile
+from pathlib import Path
+from typing import IO, Any, BinaryIO
 
 
 class TemporaryFile:
-    def __init__(self, name, io, delete):
+    def __init__(self, name: str, io: IO[Any] | BinaryIO | None, delete: bool):
         self.name = name
         self.__io = io
         self.__delete = delete
 
-    def __getattr__(self, k):
+    def __getattr__(self, k: Any) -> Any:
         return getattr(self.__io, k)
 
-    def __del__(self):
+    def __del__(self) -> None:
         if self.__delete:
             try:
                 os.unlink(self.name)
@@ -19,7 +21,14 @@ class TemporaryFile:
                 pass
 
 
-def NamedTemporaryFile(mode="w+b", bufsize=-1, suffix="", prefix="tmp", dir=None, delete=True):
+def NamedTemporaryFile(
+    mode: str | None = "w+b",
+    bufsize: int = -1,
+    suffix: str = "",
+    prefix: str = "tmp",
+    dir: Path | str | None = None,
+    delete: bool = True,
+) -> TemporaryFile:
     if not dir:
         dir = tempfile.gettempdir()
     name = os.path.join(dir, prefix + os.urandom(32).hex() + suffix)
@@ -30,12 +39,3 @@ def NamedTemporaryFile(mode="w+b", bufsize=-1, suffix="", prefix="tmp", dir=None
         fh.close()
         fh = open(name, mode)
     return TemporaryFile(name, fh, delete)
-
-
-def test_ntf_del():
-    x = NamedTemporaryFile(suffix="s", prefix="p")
-    assert os.path.exists(x.name)
-    name = x.name
-    del x
-    gc.collect()
-    assert not os.path.exists(name)

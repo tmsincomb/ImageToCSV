@@ -34,7 +34,7 @@ from .hardcoded_options import options
     help="Index for the CSV file",
 )
 @click.option(
-    "--column_header",
+    "--columns",
     "-c",
     type=click.STRING,
     default=None,
@@ -70,34 +70,58 @@ from .hardcoded_options import options
     ),
 )
 def main(
-    verbose: bool,
     index_name: str,
-    index: str,
-    column_header: str,
-    preconfigured_options: str,
+    index: list[str],
+    columns: list[str],
+    preconfigured_option: str,
     image_path: str,
     csv_path: str,
 ):
-    """Console script for imagetocsv."""
-    if preconfigured_options:
+    """Console script for imagetocsv.
+
+    Parameters
+    ----------
+    verbose : bool
+        Vebosity level, ex. -vvvvv for debug level logging
+    index_name : str
+        Index Name for the CSV file
+    index : list[str]
+        Index for the CSV file
+    columns : list[str]
+        Columns for the CSV file
+    preconfigured_option : str
+        Preconfigured Index/Header Options
+    image_path : str
+        Path for input image
+    csv_path : str
+        Path for output CSV file
+
+    Raises
+    ------
+    KeyError
+        Preconfigured Option not found
+    FileNotFoundError
+        Input Image not found
+    """
+    if preconfigured_option:
         try:
-            index_name, index, column_header = options[preconfigured_options]
+            index_name, index, columns = options[preconfigured_option]
         except KeyError:
             raise KeyError(
-                f"preconfigured_options {preconfigured_options} not found, following options are available: {options}"
+                f"preconfigured_option {preconfigured_option} not found, following options are available: {options}"
             )
 
     if Path(image_path).exists() is False:
         raise FileNotFoundError(f"File {image_path} does not exist")
 
-    df = imagetocsv(image_path, index_name, index, column_header)
+    df = imagetocsv(image_path, index_name, index, columns)
+    show_index = True if index else False
 
     if csv_path and Path(csv_path).name != "-":
-        df.to_csv(csv_path, index=index, header=column_header)
+        df.to_csv(path_or_buf=csv_path, index=show_index, header=columns)
     else:
-        print(df.to_csv(index=index, header=column_header))
+        print(df.to_csv(index=show_index, header=columns))
 
 
 if __name__ == "__main__":
-    # print("Running imagetocsv.cli.main()")
     sys.exit(main())  # pragma: no cover
