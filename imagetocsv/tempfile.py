@@ -3,11 +3,11 @@ from __future__ import annotations
 import os
 import tempfile
 from pathlib import Path
-from typing import IO, Any, BinaryIO
+from typing import Any
 
 
 class TemporaryFile:
-    def __init__(self, name: str, io: IO[Any] | BinaryIO | None, delete: bool):
+    def __init__(self, name: str, io: Any, delete: bool):
         self.name = name
         self.__io = io
         self.__delete = delete
