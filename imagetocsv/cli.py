@@ -13,12 +13,12 @@ from .hardcoded_options import options
 
 @click.command()
 @click.version_option()
-@click.option(
-    "--verbose",
-    "-v",
-    is_flag=True,
-    help="Vebosity level, ex. -vvvvv for debug level logging",
-)
+# @click.option(
+#     "--verbose",
+#     "-v",
+#     is_flag=True,
+#     help="Vebosity level, ex. -vvvvv for debug level logging",
+# )
 @click.option(
     "--index_name",
     "-n",
@@ -41,7 +41,7 @@ from .hardcoded_options import options
     help="Columns for the CSV file",
 )
 @click.option(
-    "--preconfigured-options",
+    "--preconfigured-option",
     "-p",
     type=click.STRING,
     default=None,
@@ -76,7 +76,7 @@ def main(
     preconfigured_option: str,
     image_path: str,
     csv_path: str,
-):
+) -> None:
     """Console script for imagetocsv.
 
     Parameters
@@ -108,7 +108,7 @@ def main(
             index_name, index, columns = options[preconfigured_option]
         except KeyError:
             raise KeyError(
-                f"preconfigured_option {preconfigured_option} not found, following options are available: {options}"
+                f"preconfigured_option {preconfigured_option} not found, following options are available: {options.keys()}"
             )
 
     if Path(image_path).exists() is False:
