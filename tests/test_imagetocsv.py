@@ -41,7 +41,7 @@ def test_imagetocsv_with_label_and_index(fixture_setup):
             "P14-3",
             "P14-4",
         ],
-        column_header=["Events", "%Parent", "%Total", "FSC-A Median", "FSC-A %rCV", "SSC-A Median", "SSC-A %rCV"],
+        columns=["Events", "%Parent", "%Total", "FSC-A Median", "FSC-A %rCV", "SSC-A Median", "SSC-A %rCV"],
     )
     test_csv = df.to_csv(encoding="utf-8-sig")
     ref_csv = pd.read_csv(

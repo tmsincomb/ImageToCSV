@@ -51,9 +51,10 @@ def test_command_line_interface(fixture_setup):
             no_grid_path,
             "-",
             "-p",
-            "bib",
+            "chrous",
         ],
     )
+    csv = "\n".join(csv.stdout.splitlines()).strip()
     with open(fixture_setup.base_datadir / "no-grid-index-label.csv", "r") as f:
         assert csv == f.read().strip()
     csv = runner.invoke(
@@ -69,5 +70,6 @@ def test_command_line_interface(fixture_setup):
             r"Events,%Parent,%Total,FSC-A Median,FSC-A %rCV,SSC-A Median,SSC-A %rCV",
         ],
     )
+    csv = "\n".join(csv.stdout.splitlines()).strip()
     with open(fixture_setup.base_datadir / "no-grid-index-label.csv", "r") as f:
         assert csv == f.read().strip()

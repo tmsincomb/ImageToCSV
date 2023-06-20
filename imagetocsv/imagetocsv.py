@@ -14,9 +14,6 @@ import pdftotext
 from imagetocsv.string_modifiers import fix_common_mistakes
 from imagetocsv.tempfile import NamedTemporaryFile
 
-# import pytesseract
-
-
 
 def pdftocsv(file: str) -> list[list[str]]:
     """Convert a pdf file to a list of lists of strings. We do this to keep layout information.
@@ -37,7 +34,9 @@ def pdftocsv(file: str) -> list[list[str]]:
 
     # Find start positions of all columns
     with open(file, "rb") as f:
-        pdf = pdftotext.PDF(f, physical=True)[0]
+        pdf: str = pdftotext.PDF(f, physical=True)[0]
+        if not isinstance(pdf, str):
+            raise TypeError("PDF format not supported. Could not convert to string.")
         for line in pdf.split("\n"):
             for special_char in special_chars.split():
                 line = line.replace(f" {special_char}", f"{special_char} ")
@@ -86,7 +85,9 @@ def pdftocsv(file: str) -> list[list[str]]:
     return rows
 
 
-def add_df_indexes_headers(df: pd.DataFrame, index_name: str, index: str, column_header: str) -> pd.DataFrame:
+def add_df_indexes_headers(
+    df: pd.DataFrame, index_name: str | None, index: list[str] | None, columns: list[str] | None
+) -> pd.DataFrame:
     """Add indexes and headers to a dataframe.
 
     Parameters
@@ -95,9 +96,9 @@ def add_df_indexes_headers(df: pd.DataFrame, index_name: str, index: str, column
         The dataframe to add indexes and headers to.
     index_name : str, optional
         Name of the index, by default None
-    index : list[str] | str, optional
+    index : list[str] | str, optionals
         Index values, by default None
-    column_header : list[str] | str, optional
+    columns : list[str] | str, optional
         Column header values, by default None
 
     Returns
@@ -105,12 +106,12 @@ def add_df_indexes_headers(df: pd.DataFrame, index_name: str, index: str, column
     pd.DataFrame
         The dataframe with indexes and headers.
     """
-    if column_header:
-        df.columns = column_header.split(",") if isinstance(column_header, str) else column_header
+    if columns:
+        df.columns = columns.split(",") if isinstance(columns, str) else columns
     if index:
-        df.index = index.split(",") if isinstance(index, str) else index
+        df.index = pd.Index(index.split(",") if isinstance(index, str) else index)
     if index_name:
-        df.index.name = index_name
+        df.index.name = index_name  # type: ignore
 
     return df
 
@@ -121,7 +122,7 @@ def unsharp_mask(
     sigma: float = 1.0,
     amount: float = 1.0,
     threshold: float = 0,
-):
+) -> npt.NDArray[np.uint8]:
     """Return a sharpened version of the image, using an unsharp mask.
 
     Parameters
@@ -156,8 +157,8 @@ def unsharp_mask(
 def imagetocsv(
     file: str,
     index_name: str | None = None,
-    index: list[str] | str | None = None,
-    column_header: list[str] | str | None = None,
+    index: list[str] | None = None,
+    columns: list[str] | None = None,
 ) -> pd.DataFrame:
     """Convert an image file to a pandas DataFrame.
 
@@ -169,7 +170,7 @@ def imagetocsv(
         Name of the index, by default None
     index : list[str] | str, optional
         Index values, by default None
-    column_header : list[str] | str, optional
+    columns : list[str] | str, optional
         Column header values, by default None
 
     Returns
@@ -181,7 +182,7 @@ def imagetocsv(
     img = cv2.imread(file)
     h, w, _ = img.shape
     img = cv2.resize(img, (w * 3, h * 3))
-    img = unsharp_mask(img)
+    img = unsharp_mask(img)  # type: ignore
     grayImage = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
     (_thresh, blackAndWhiteImage) = cv2.threshold(grayImage, 180, 255, cv2.THRESH_BINARY)
 
@@ -198,7 +199,7 @@ def imagetocsv(
     #     "blackAndWhiteImage.png", lang="eng", extension="pdf", config=custom_oem_psm_config
     # )
 
-    tmp = NamedTemporaryFile(delete=False, mode=None)
+    tmp = NamedTemporaryFile(delete=False, mode=None)  # type: ignore
     prefix: str = tmp.name
     # Tesseract cannot handle stdin so we need to write the image to a file first
     cv2.imwrite(prefix + ".png", blackAndWhiteImage)
@@ -230,6 +231,6 @@ def imagetocsv(
     gc.collect()
 
     df = pd.DataFrame(rows)
-    df = add_df_indexes_headers(df, index_name, index, column_header)
+    df = add_df_indexes_headers(df, index_name, index, columns)
 
     return df

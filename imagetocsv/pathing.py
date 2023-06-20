@@ -5,23 +5,24 @@ from __future__ import annotations
 
 import os
 from pathlib import Path
+from typing import Any
 
 
 class cd:
     """Context manager for changing the current working directory"""
 
-    def __init__(self, newPath):
+    def __init__(self, newPath: Path | str):
         self.newPath = os.path.expanduser(newPath)
 
     def __enter__(self):
         self.savedPath = os.getcwd()
         os.chdir(self.newPath)
 
-    def __exit__(self, etype, value, traceback):
+    def __exit__(self, etype: Any, value: Any, traceback: Any):
         os.chdir(self.savedPath)
 
 
-def pathing(path: str, new: bool = False, overwrite: bool = True) -> Path:
+def pathing(path: Path | str, new: bool = False, overwrite: bool = True) -> Path:
     """Guarantees correct expansion rules for pathing.
     :param Union[str, Path] path: path of folder or file you wish to expand.
     :param bool new: will check if distination exists if new  (will check parent path regardless).
@@ -47,4 +48,4 @@ def pathing(path: str, new: bool = False, overwrite: bool = True) -> Path:
     else:
         if not path.exists():
             raise ValueError(f"ERROR ::: Path {path} does not exist.")
-    return
+    return path
