@@ -32,7 +32,6 @@ jobs:
         if: runner.os == 'Linux'
         run: sudo apt install --yes libpoppler-cpp-dev pkg-config tesseract-ocr libtesseract-dev
       - name: Install dependencies
-        run: |
-          pip install '.[dev]'
+        run: pip install --no-cache-dir ".[dev]"  # opencv known for cache issues
       - name: Unit Testing
         run: pytest -xsvv tests/test_imagetocsv.py
