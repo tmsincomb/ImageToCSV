@@ -120,7 +120,7 @@ def main(
     if csv_path and Path(csv_path).name != "-":
         df.to_csv(path_or_buf=csv_path, index=show_index, header=columns)
     else:
-        print(df.to_csv(index=show_index, header=columns))
+        print(df.to_csv(index=show_index, header=columns), file=sys.stdout)
 
 
 if __name__ == "__main__":

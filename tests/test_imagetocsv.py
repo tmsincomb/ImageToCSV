@@ -5,8 +5,10 @@ import pandas as pd
 
 from imagetocsv import imagetocsv
 
+from .conftest import PathFixture
 
-def test_imagetocsv(fixture_setup):
+
+def test_imagetocsv(fixture_setup: PathFixture) -> None:
     no_grid_path = fixture_setup.get_no_grid()
     df = imagetocsv(no_grid_path)
     test_csv = df.to_csv(index=False, header=False, encoding="utf-8-sig")
@@ -16,7 +18,7 @@ def test_imagetocsv(fixture_setup):
     assert test_csv == ref_csv
 
 
-def test_imagetocsv_with_label_and_index(fixture_setup):
+def test_imagetocsv_with_label_and_index(fixture_setup: PathFixture) -> None:
     no_grid_path = fixture_setup.get_no_grid()
     df = imagetocsv(
         no_grid_path,

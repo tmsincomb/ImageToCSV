@@ -230,7 +230,7 @@ def imagetocsv(
     del tmp
     gc.collect()
 
-    df = pd.DataFrame(rows)
+    df = pd.DataFrame(data=rows)
     df = add_df_indexes_headers(df, index_name, index, columns)
 
     return df
