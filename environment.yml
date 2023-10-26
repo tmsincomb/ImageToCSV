@@ -2,7 +2,7 @@ name: imagetocsv
 channels:
   - conda-forge
 dependencies:
-  - python>=3.7
+  - python>=3.10
   - pip
   - poppler==22.11.0
   - tesseract==5.2.0
