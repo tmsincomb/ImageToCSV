@@ -4,6 +4,5 @@ channels:
 dependencies:
   - python>=3.10
   - pip
-  - gcc
   - poppler==22.11.0
   - tesseract==5.2.0
