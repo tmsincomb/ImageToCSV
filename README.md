@@ -82,7 +82,7 @@ pip install imagetocsv
 ```bash
 conda create -n imagetocsv pip python=3.11.6
 conda activate imagetocsv
-conda install -y -c conda-forge gcc gxx poppler==22.11.0 tesseract==5.2.0
+conda install -y -c conda-forge gcc_linux-64 gxx_linux-64 poppler==22.11.0 tesseract==5.2.0
 pip install imagetocsv
 ```
 
