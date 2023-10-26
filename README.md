@@ -5,8 +5,8 @@
 
 <div class="flex-container" align="center">
     <a href="https://github.com/jwillis0720/template-repo/commits/master">
-    <a href="https://img.shields.io/badge/Python-3.%7C3.8%7C3.9%7C3.10-blue">
-    <img src="https://img.shields.io/badge/Python-3.7%7C3.8%7C3.9%7C3.10%7C3.11-blue"
+    <a href="https://img.shields.io/badge/Python-3.%7C3.8%7C3.9%7C3.10%7C3.11%7C3.12-blue">
+    <img src="https://img.shields.io/badge/Python-3.7%7C3.8%7C3.9%7C3.10%7C3.11%7C3.12-blue"
         alt="Python Version">
     <a href="https://github.com/psf/black">
     <img src="https://img.shields.io/badge/code%20style-black-000000.svg"
@@ -31,7 +31,7 @@
 
 <p align="center" style="color:green">
   <a href="#about">About</a> •
-  <a href="#installation">Install</a> •
+  <a href="#installation-macos">Install</a> •
   <a href="#terminal">Terminal</a> •
   <a href="#python">Python</a> •
   <a href="#license">License</a>
