@@ -8,6 +8,7 @@ on:
     branches: ["main", "development"]
 jobs:
   pytest:
+    if: always()
     name: Ex1 ${{ matrix.python-version }} ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     defaults:
@@ -17,7 +18,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [windows-latest, ubuntu-latest, macos-latest]
-        python-version: [3.7, "3.11"]
+        python-version: ["3.10", "3.11"]
     steps:
       - uses: actions/checkout@v2
       - uses: conda-incubator/setup-miniconda@v2
@@ -27,10 +28,6 @@ jobs:
           activate-environment: imagetocsv
           environment-file: environment.yml
           auto-activate-base: false
-      # Needed for python 3.7 only
-      - name: Install dependencies (linux)
-        if: runner.os == 'Linux'
-        run: sudo apt install --yes libpoppler-cpp-dev pkg-config tesseract-ocr libtesseract-dev
       - name: Install dependencies
         run: pip install --no-cache-dir ".[dev]"  # opencv known for cache issues
       - name: Unit Testing
