@@ -18,7 +18,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [windows-latest, ubuntu-latest, macos-latest]
-        python-version: ["3.10"]
+        python-version: ["3.10", "3.11"]
     steps:
       - uses: actions/checkout@v2
       - uses: conda-incubator/setup-miniconda@v2
@@ -34,7 +34,7 @@ jobs:
         run: conda install -y gcc gxx
       - name: Install dependencies (macos)
         if: runner.os == 'macos'
-        run: conda install -y clangxx_osx-64
+        run: conda install -y clang_osx-64 clangxx_osx-64
       - name: Install dependencies
         run: pip install --no-cache-dir ".[dev]"  # opencv known for cache issues
       - name: Unit Testing

@@ -68,21 +68,40 @@ Conda does not install all needed packages for Python 3.7 so you need to install
 sudo apt install --yes build-essential libpoppler-cpp-dev pkg-config tesseract-ocr libtesseract-dev
 ```
 
-# Installation
+# Installation MacOS
 
 ```bash
-conda create -n imagetocsv -f environment.yml
+conda create -n imagetocsv pip python=3.11.6
 conda activate imagetocsv
+conda install -y -c conda-forge clang_osx-64 clangxx_osx-64 poppler==22.11.0 tesseract==5.2.0
+pip install imagetocsv
+```
+
+# Installation Linux
+
+```bash
+conda create -n imagetocsv pip python=3.11.6
+conda activate imagetocsv
+conda install -y -c conda-forge gcc gxx poppler==22.11.0 tesseract==5.2.0
+pip install imagetocsv
+```
+
+# Installation Windows 10/11
+
+### Note that this is untested and may not work if you do not have a C++ compiler installed.
+
+```bash
+conda create -n imagetocsv pip python=3.11.6
+conda activate imagetocsv
+conda install -y -c conda-forge poppler==22.11.0 tesseract==5.2.0
 pip install imagetocsv
 ```
 
 # Development
 
-## Conda environment
+## Pip install cloned repo
 
 ```bash
-conda create -n imagetocsv -f environment.yml
-conda activate imagetocsv
 pip install -e ".[dev]"
 ```
 
